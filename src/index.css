@@ -1,0 +1,46 @@
+header {
+    box-shadow: 0px 5px 10px -2px rgba(225, 161, 144, 0.5);
+    margin-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Rubik', sans-serif;
+  font-weight: 800;
+  color: #023669 !important;
+  margin: 0;
+  padding: 5px 0px 0px 0px;
+}
+
+.course-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.course-preview {
+    width: 200%;
+    max-width: 350px;
+    height: auto;
+    border-radius: 175px;
+    object-fit: contain;
+}
+
+.course-preview-mini {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    align-self: flex-start;
+    margin-top: 8px;
+}
+
+.course-details {
+    flex-grow: 1;
+}
+
+.pink-divider {
+    border: none;
+    height: 3px;
+    background-color: #FFB6C1; /* Нежно-розовая линия */
+    margin: 10px 0;
+}
