@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getLessonById } from "../service/LessonService"
+import { getLessonById, getMediaUrl } from "../service/LessonService"
 import { useParams, useNavigate } from "react-router-dom"
 import "../styles/Lesson.css"
 
@@ -31,20 +31,42 @@ function Lesson() {
     switch (block.contentType) {
       case "HEADER":
         return <h3 className="lesson-header">{block.content}</h3>
+
       case "TEXT":
         return <p className="lesson-text">{block.content}</p>
+
       case "IMAGE":
         return (
           <div className="lesson-image-container">
-            <img src={block.content || "/placeholder.svg"} alt="Lesson content" className="lesson-image" />
+            <img
+              src={getMediaUrl(block.content) || "/placeholder.svg"}
+              alt="Lesson content"
+              className="lesson-image"
+              onError={(e) => {
+                e.target.onerror = null
+                e.target.src = "/placeholder.svg"
+                console.error(`Failed to load image: ${block.content}`)
+              }}
+            />
           </div>
         )
+
       case "VIDEO":
         return (
           <div className="lesson-video-container">
-            <iframe src={block.content} title="Lesson video" className="lesson-video" allowFullScreen></iframe>
+            <video
+              src={getMediaUrl(block.content)}
+              controls
+              className="lesson-video"
+              onError={(e) => {
+                console.error(`Failed to load video: ${block.content}`)
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
         )
+
       default:
         return <p>Unknown content type: {block.contentType}</p>
     }
@@ -73,8 +95,10 @@ function Lesson() {
   return (
     <div className="container mt-4 lesson-container">
       <div className="lesson-header-container">
-        <h2 className="lesson-title">{lesson.title}</h2>
-        <button className="btn btn-outline-primary" onClick={() => navigate(-1)}>
+        <h2 className="lesson-title">
+          {lesson.order}. {lesson.title}
+        </h2>
+        <button className="btn btn-outline-primary" onClick={() => navigate(`/courses/${lesson.courseId}`)}>
           Back to Course
         </button>
       </div>
