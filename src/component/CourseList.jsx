@@ -9,7 +9,10 @@ function CourseList() {
 
     useEffect(() => {
         getAllCourses()
-            .then((response) => setCourses(response.data))
+            .then((response) => {
+                console.log(response)
+                setCourses(response.data)}
+            )
             .catch(error => console.error(error));
     }, []);
 

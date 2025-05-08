@@ -1,0 +1,19 @@
+.lessons-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-item {
+  transition: background-color 0.2s;
+}
+
+.lesson-item:hover {
+  background-color: #f8f9fa;
+}
+
+.lesson-item h5 {
+  color: #023669;
+  font-weight: 600;
+}
