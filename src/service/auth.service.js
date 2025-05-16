@@ -3,6 +3,10 @@ import api from './axios';
 export const AuthService = {
   async login(email, password) {
     const response = await api.post('/auth/login', { email, password });
+    if (response.data.token) {
+      this.setToken(response.data.token);
+      this.setRole(response.data.role);
+    }
     return response.data;
   },
 
@@ -13,6 +17,10 @@ export const AuthService = {
       name,
       role 
     });
+    if (response.data.token) {
+      this.setToken(response.data.token);
+      this.setRole(response.data.role);
+    }
     return response.data;
   },
 
@@ -31,6 +39,23 @@ export const AuthService = {
 
   removeToken() {
     localStorage.removeItem('token');
+  },
+
+  getRole() {
+    return localStorage.getItem('userRole');
+  },
+
+  setRole(role) {
+    localStorage.setItem('userRole', role);
+  },
+
+  removeRole() {
+    localStorage.removeItem('userRole');
+  },
+
+  logout() {
+    this.removeToken();
+    this.removeRole();
   },
 
   isAuthenticated() {
