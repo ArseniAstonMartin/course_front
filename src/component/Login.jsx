@@ -1,30 +1,80 @@
 "use client"
 
-import { useNavigate } from "react-router-dom"
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/Authorization.css';
+import AuthService from '../service/auth.service';
 
-function Login() {
-  const navigate = useNavigate()
+const Login = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const response = await AuthService.login(formData.email, formData.password);
+      AuthService.setToken(response.token);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Произошла ошибка при входе');
+    }
+  };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow">
-            <div className="card-body p-5">
-              <h2 className="text-center mb-4">Log In</h2>
-              <p className="text-center text-muted mb-4">This is a placeholder login page</p>
-
-              <div className="d-grid gap-2">
-                <button className="btn btn-primary" onClick={() => navigate("/courses")}>
-                  Back to Courses
-                </button>
-              </div>
-            </div>
-          </div>
+    <div className="auth-container">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2 className="auth-title">Вход</h2>
+        
+        <div className="auth-input-group">
+          <input
+            type="email"
+            name="email"
+            className="auth-input"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </div>
-      </div>
-    </div>
-  )
-}
 
-export default Login
+        <div className="auth-input-group">
+          <input
+            type="password"
+            name="password"
+            className="auth-input"
+            placeholder="Пароль"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {error && <div className="auth-error">{error}</div>}
+
+        <button type="submit" className="auth-button">
+          Войти
+        </button>
+
+        <Link to="/signup" className="auth-link">
+          Нет аккаунта? Зарегистрироваться
+        </Link>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
