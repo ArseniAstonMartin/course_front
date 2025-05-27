@@ -47,7 +47,7 @@ function CourseList() {
                     <div key={course.id} className="col-12">
                         <div className="card shadow-sm mb-3">
                             <div className="card-body d-flex align-items-center">
-                                <img src={reactLogo} alt="Course Preview" className="course-preview-mini me-3" />
+                                <img src={course.filename ? `http://127.0.0.1:9000/media/${course.filename}` : reactLogo} alt="Course Preview" className="course-preview-mini me-3" onError={e => { e.target.onerror = null; e.target.src = reactLogo }} />
 
                                 <div>
                                     <h5 className="card-title">{course.title}</h5>

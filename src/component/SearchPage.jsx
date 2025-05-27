@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import instance from "../service/axios.js"
+import reactLogo from "../assets/react.svg"
+import avatarNotFound from "../assets/avatar-not-found.svg"
 
 function useQuery() {
   return new URLSearchParams(useLocation().search)
@@ -68,20 +70,26 @@ const SearchPage = () => {
       <div className="mt-3">
         {results.length === 0 && !loading && <div>Нет результатов</div>}
         {filter === "courses" && results.map(course => (
-          <div key={course.id} className="card mb-2 p-2">
-            <h5>{course.title}</h5>
-            <p>{course.description}</p>
-            <div className="d-flex justify-content-start">
-              <button className="btn btn-primary w-auto mt-2 ms-2" onClick={() => handleCoursePage(course.id)}>Learn More</button>
+          <div key={course.id} className="card mb-2 p-2 d-flex flex-row align-items-center">
+            <img src={course.filename ? `http://127.0.0.1:9000/media/${course.filename}` : reactLogo} alt="Course Preview" style={{width: 60, height: 60, objectFit: 'cover', borderRadius: 8, marginRight: 16}} onError={e => { e.target.onerror = null; e.target.src = reactLogo }} />
+            <div style={{flex: 1}}>
+              <h5>{course.title}</h5>
+              <p>{course.description}</p>
+              <div className="d-flex justify-content-start">
+                <button className="btn btn-primary w-auto mt-2 ms-2" onClick={() => handleCoursePage(course.id)}>Learn More</button>
+              </div>
             </div>
           </div>
         ))}
         {filter === "teachers" && results.map(teacher => (
-          <div key={teacher.id} className="card mb-2 p-2">
-            <h5>{teacher.name}</h5>
-            <p>{teacher.email}</p>
-            <div className="d-flex justify-content-start">
-              <button className="btn btn-primary w-auto mt-2 ms-2" onClick={() => handleTeacherProfile(teacher.id)}>Learn More</button>
+          <div key={teacher.id} className="card mb-2 p-2 d-flex flex-row align-items-center">
+            <img src={teacher.filename ? `http://127.0.0.1:9000/media/${teacher.filename}` : avatarNotFound} alt="Avatar" style={{width: 60, height: 60, objectFit: 'cover', borderRadius: '50%', marginRight: 16}} onError={e => { e.target.onerror = null; e.target.src = avatarNotFound }} />
+            <div style={{flex: 1}}>
+              <h5>{teacher.name}</h5>
+              <p>{teacher.email}</p>
+              <div className="d-flex justify-content-start">
+                <button className="btn btn-primary w-auto mt-2 ms-2" onClick={() => handleTeacherProfile(teacher.id)}>Learn More</button>
+              </div>
             </div>
           </div>
         ))}

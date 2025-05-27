@@ -2,13 +2,15 @@ import { useEffect, useState } from "react"
 import AuthService from "../service/auth.service"
 import avatarNotFound from "../assets/avatar-not-found.svg"
 import "../styles/MyProfilePage.css"
+import { useNavigate } from "react-router-dom"
 
 const MyProfilePage = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    AuthService.getUserInfo()
+    AuthService.getUser()
       .then((data) => {
         setUser(data)
         setLoading(false)
@@ -18,6 +20,11 @@ const MyProfilePage = () => {
         setLoading(false)
       })
   }, [])
+
+  const handleLogout = () => {
+    AuthService.logout()
+    navigate("/login")
+  }
 
   if (loading) {
     return (
@@ -43,7 +50,7 @@ const MyProfilePage = () => {
     <div className="container mt-4">
       <div className="profile-container d-flex align-items-center" style={{ minHeight: "340px" }}>
         <img
-          src={user.fileName ? `http://127.0.0.1:9000/media/${user.fileName}` : avatarNotFound}
+          src={user.filename ? `http://127.0.0.1:9000/media/${user.filename}` : avatarNotFound}
           alt="avatar"
           className="profile-preview"
           onError={e => { e.target.onerror = null; e.target.src = avatarNotFound }}
@@ -54,6 +61,7 @@ const MyProfilePage = () => {
           <div style={{ fontSize: "1.1rem", color: "#555" }}>
             <a href={`mailto:${user.email}`} style={{ color: "#007bff", textDecoration: "underline" }}>{user.email}</a>
           </div>
+          <button className="btn btn-outline-danger mt-4" onClick={handleLogout}>Logout</button>
         </div>
       </div>
     </div>

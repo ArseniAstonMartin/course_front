@@ -10,7 +10,7 @@ function Header() {
 
   useEffect(() => {
     if (AuthService.isAuthenticated()) {
-      AuthService.getUserInfo().then(setUser).catch(() => setUser(null))
+      AuthService.getUser().then(setUser).catch(() => setUser(null))
     } else {
       setUser(null)
     }
@@ -67,7 +67,7 @@ function Header() {
         <div>
           {user ? (
             <img
-              src={user.fileName ? `http://127.0.0.1:9000/media/${user.fileName}` : avatarNotFound}
+              src={user.filename ? `http://127.0.0.1:9000/media/${user.filename}` : avatarNotFound}
               alt="avatar"
               className="rounded-circle"
               style={{ width: 40, height: 40, objectFit: "cover", cursor: "pointer", border: "2px solid #007bff" }}

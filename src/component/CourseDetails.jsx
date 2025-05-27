@@ -77,7 +77,7 @@ function CourseDetails() {
     <div className="container mt-4">
       <div className="course-container">
         {/* Left side — image */}
-        <img src={reactLogo || "/placeholder.svg"} alt="Course Preview" className="course-preview" />
+        <img src={course.filename ? `http://127.0.0.1:9000/media/${course.filename}` : reactLogo} alt="Course Preview" className="course-preview" onError={e => { e.target.onerror = null; e.target.src = reactLogo }} />
 
         {/* Right side — title, <hr> and description */}
         <div className="course-details">
