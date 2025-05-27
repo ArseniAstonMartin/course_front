@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getCourseById, getLessonsByCourseId } from "../service/CourseService"
+import { getCourseById, getLessonsByCourseId, getMoreLikeThisCourses } from "../service/CourseService"
 import { useParams, useNavigate } from "react-router-dom"
 import reactLogo from "../assets/react.svg"
 import "../styles/CourseDetails.css"
@@ -13,9 +13,12 @@ function CourseDetails() {
   const [lessons, setLessons] = useState([])
   const [loading, setLoading] = useState(true)
   const [isCreator, setIsCreator] = useState(true) // This would normally be determined by authentication
+  const [similarCourses, setSimilarCourses] = useState([])
+  const [similarLoading, setSimilarLoading] = useState(true)
 
   useEffect(() => {
     setLoading(true)
+    setSimilarLoading(true)
 
     // Fetch course details
     getCourseById(id)
@@ -36,6 +39,16 @@ function CourseDetails() {
           navigate("/courses")
         }
       })
+    // Fetch similar courses
+    getMoreLikeThisCourses(id, 0, 3)
+      .then((response) => {
+        setSimilarCourses(response.data.content || [])
+        setSimilarLoading(false)
+      })
+      .catch((error) => {
+        setSimilarCourses([])
+        setSimilarLoading(false)
+      })
   }, [id, navigate])
 
   const handleAddLesson = () => {
@@ -44,6 +57,10 @@ function CourseDetails() {
 
   const handleStudyLesson = (lessonId) => {
     navigate(`/lessons/${lessonId}`)
+  }
+
+  const handleSimilarCourse = (id) => {
+    navigate(`/courses/${id}`)
   }
 
   if (loading) {
@@ -60,7 +77,7 @@ function CourseDetails() {
     <div className="container mt-4">
       <div className="course-container">
         {/* Left side — image */}
-        <img src={reactLogo || "/placeholder.svg"} alt="Course Preview" className="course-preview" />
+        <img src={course.filename ? `http://127.0.0.1:9000/media/${course.filename}` : reactLogo} alt="Course Preview" className="course-preview" onError={e => { e.target.onerror = null; e.target.src = reactLogo }} />
 
         {/* Right side — title, <hr> and description */}
         <div className="course-details">
@@ -99,6 +116,30 @@ function CourseDetails() {
                   </div>
                 </div>
               ))}
+          </div>
+        )}
+      </div>
+
+      {/* Similar courses */}
+      <div className="similar-courses-container mt-4">
+        <h3 className="mb-3">Похожие курсы</h3>
+        {similarLoading ? (
+          <div>Загрузка похожих курсов...</div>
+        ) : similarCourses.length === 0 ? (
+          <div>Нет похожих курсов</div>
+        ) : (
+          <div className="row">
+            {similarCourses.map((course) => (
+              <div key={course.id} className="col-md-4 mb-3">
+                <div className="card h-100 p-2">
+                  <h5>{course.title}</h5>
+                  <p>{course.description}</p>
+                  <div className="d-flex justify-content-start">
+                    <button className="btn btn-primary w-auto mt-2 ms-2" onClick={() => handleSimilarCourse(course.id)}>Learn More</button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

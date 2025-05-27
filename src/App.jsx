@@ -9,6 +9,8 @@ import Lesson from "./component/Lesson.jsx"
 import CreateLesson from "./component/CreateLesson.jsx"
 import Login from "./component/Login.jsx"
 import Signup from "./component/Signup.jsx"
+import SearchPage from "./component/SearchPage.jsx"
+import MyProfilePage from "./component/MyProfilePage.jsx"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import "./index.css"
 
@@ -27,6 +29,8 @@ function App() {
           <Route path="/lessons/:id" element={<Lesson />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/search" element={<SearchPage />}></Route>
+          <Route path="/my-profile" element={<MyProfilePage />}></Route>
           <Route path="*" element={<Navigate to="/courses" />}></Route>
         </Routes>
       </BrowserRouter>

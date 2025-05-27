@@ -29,6 +29,11 @@ export const AuthService = {
     return response.data;
   },
 
+  async getUser() {
+    const response = await api.get('/user');
+    return response.data;
+  },
+
   getToken() {
     return localStorage.getItem('token');
   },
