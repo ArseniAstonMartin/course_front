@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import axios from "axios"
+import instance from "../service/axios.js"
 import "../styles/CreateLesson.css"
 
 function CreateLesson() {
@@ -95,7 +95,7 @@ function CreateLesson() {
       })
 
       // Send the request to the backend
-      await axios.post("http://localhost:8080/lessons", formData, {
+      await instance.post("http://localhost:8080/lessons", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

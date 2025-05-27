@@ -1,12 +1,25 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import AuthService from "../service/auth.service"
+import avatarNotFound from "../assets/avatar-not-found.svg"
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState("")
   const navigate = useNavigate()
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    if (AuthService.isAuthenticated()) {
+      AuthService.getUserInfo().then(setUser).catch(() => setUser(null))
+    } else {
+      setUser(null)
+    }
+  }, [])
 
   const handleSearch = () => {
-    navigate(`/courses?query=${searchQuery}`)
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`)
+    }
   }
 
   const handleLogin = () => {
@@ -15,6 +28,10 @@ function Header() {
 
   const handleSignup = () => {
     navigate("/signup")
+  }
+
+  const handleProfile = () => {
+    navigate("/my-profile")
   }
 
   return (
@@ -36,6 +53,11 @@ function Header() {
             placeholder="Enter course name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchQuery.trim()) {
+                handleSearch()
+              }
+            }}
           />
           <button className="btn btn-outline-primary ms-2" onClick={handleSearch}>
             🔍
@@ -43,12 +65,25 @@ function Header() {
         </div>
 
         <div>
-          <button className="btn btn-outline-primary me-2" onClick={handleLogin}>
-            Log In
-          </button>
-          <button className="btn btn-primary" onClick={handleSignup}>
-            Sign Up
-          </button>
+          {user ? (
+            <img
+              src={user.fileName ? `http://127.0.0.1:9000/media/${user.fileName}` : avatarNotFound}
+              alt="avatar"
+              className="rounded-circle"
+              style={{ width: 40, height: 40, objectFit: "cover", cursor: "pointer", border: "2px solid #007bff" }}
+              onClick={handleProfile}
+              onError={e => { e.target.onerror = null; e.target.src = avatarNotFound }}
+            />
+          ) : (
+            <>
+              <button className="btn btn-outline-primary me-2" onClick={handleLogin}>
+                Log In
+              </button>
+              <button className="btn btn-primary" onClick={handleSignup}>
+                Sign Up
+              </button>
+            </>
+          )}
         </div>
       </nav>
     </header>
