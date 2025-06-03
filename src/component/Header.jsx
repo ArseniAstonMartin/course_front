@@ -17,6 +17,10 @@ function Header() {
     navigate("/signup")
   }
 
+  const handleBell = () => {
+    navigate("/my-invitations")
+  }
+
   return (
     <header>
       <nav className="navbar navbar-light bg-light d-flex justify-content-between align-items-center px-4">
@@ -39,6 +43,9 @@ function Header() {
           />
           <button className="btn btn-outline-primary ms-2" onClick={handleSearch}>
             🔍
+          </button>
+          <button className="btn btn-outline-secondary ms-2" title="Мои приглашения" onClick={handleBell}>
+            <span role="img" aria-label="bell">🔔</span>
           </button>
         </div>
 

@@ -1,8 +1,8 @@
-import axios from "axios"
+import instance from "./axios"
 
-const COURSES_BASE_URL = "http://localhost:8080/courses"
+const COURSES_BASE_URL = "/courses"
 
-export const getAllCourses = () => axios.get(`${COURSES_BASE_URL}/all`)
-export const getCourseById = (id) => axios.get(`${COURSES_BASE_URL}/${id}`)
-export const postNewCourse = (course) => axios.post(COURSES_BASE_URL, course)
-export const getLessonsByCourseId = (courseId) => axios.get(`${COURSES_BASE_URL}/${courseId}/lessons`)
+export const getAllCourses = () => instance.get(`${COURSES_BASE_URL}/all`)
+export const getCourseById = (id) => instance.get(`${COURSES_BASE_URL}/${id}`)
+export const postNewCourse = (course) => instance.post(COURSES_BASE_URL, course)
+export const getLessonsByCourseId = (courseId) => instance.get(`${COURSES_BASE_URL}/${courseId}/lessons`)

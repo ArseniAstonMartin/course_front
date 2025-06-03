@@ -1,9 +1,9 @@
-import axios from "axios"
+import instance from "./axios"
 
-const LESSONS_BASE_URL = "http://localhost:8080/lessons"
+const LESSONS_BASE_URL = "/lessons"
 
-export const getLessonById = (id) => axios.get(`${LESSONS_BASE_URL}/${id}`)
-export const getAllLessons = () => axios.get(LESSONS_BASE_URL)
+export const getLessonById = (id) => instance.get(`${LESSONS_BASE_URL}/${id}`)
+export const getAllLessons = () => instance.get(LESSONS_BASE_URL)
 
 // Helper function to get media URL from Minio
 export const getMediaUrl = (fileName) => {
